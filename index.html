@@ -1,234 +1,81 @@
-<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Antigravity Brain OS V4.4.2 — Execution Safety Kernel</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"><style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#030712;--surface:#0d1117;--border:#1e2d40;--accent:#00d4ff;--accent2:#7c3aed;--accent3:#10b981;--red:#ef4444;--yellow:#f59e0b;--text:#e2e8f0;--muted:#64748b}
-body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;min-height:100vh}
-.noise{position:fixed;inset:0;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none;z-index:999}
-/* GRID */
-.grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
+﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Antigravity Brain OS V4.4.2</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;margin:0;padding:0}:root{--blue:#0071e3;--dark:#1d1d1f;--mid:#86868b;--bg:#f5f5f7;--white:#fff;--ff:'Inter',system-ui,sans-serif;--fm:'JetBrains Mono',monospace;--pad:clamp(24px,6vw,120px)}html{scroll-behavior:smooth}body{font-family:var(--ff);color:var(--dark);background:var(--white);-webkit-font-smoothing:antialiased;overflow-x:hidden}a{text-decoration:none;color:inherit}
+nav{position:fixed;inset:0 0 auto;z-index:100;height:56px;display:flex;align-items:center;padding:0 var(--pad);background:rgba(255,255,255,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.08)}
+.logo{font-family:var(--fm);font-size:13px;font-weight:700;letter-spacing:.05em;display:flex;align-items:center;gap:8px;margin-right:auto}.dot{width:7px;height:7px;border-radius:50%;background:var(--blue);animation:pulse 2s ease-in-out infinite}@keyframes pulse{0%,100%{box-shadow:0 0 6px var(--blue)}50%{box-shadow:0 0 18px rgba(0,113,227,.5)}}
+.nav-link{font-size:13px;color:var(--mid);margin:0 14px;transition:color .2s}.nav-link:hover{color:var(--dark)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;border-radius:100px;font-size:13px;font-weight:600;background:var(--blue);color:#fff;transition:transform .2s,box-shadow .2s}.pill:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,113,227,.35);color:#fff}
+.pill-ghost{background:transparent;border:1px solid rgba(0,0,0,.12);color:var(--dark)}.pill-ghost:hover{border-color:var(--blue);color:var(--blue)}
 /* HERO */
-.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;overflow:hidden}
-.orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:.15;animation:pulse 6s ease-in-out infinite}
-.orb1{width:600px;height:600px;background:radial-gradient(circle,#7c3aed,transparent);top:-100px;left:-100px}
-.orb2{width:500px;height:500px;background:radial-gradient(circle,#00d4ff,transparent);bottom:-100px;right:-100px;animation-delay:-3s}
-@keyframes pulse{0%,100%{transform:scale(1);opacity:.15}50%{transform:scale(1.1);opacity:.25}}
-.badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3);border-radius:100px;padding:.4rem 1.2rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--accent);margin-bottom:2rem;animation:fadeUp .8s ease both}
-.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 1.5s ease infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-h1{font-size:clamp(2.5rem,7vw,5.5rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;animation:fadeUp .8s .1s ease both}
-h1 span{background:linear-gradient(135deg,#00d4ff,#7c3aed,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.sub{max-width:640px;margin:1.5rem auto 0;font-size:1.15rem;color:var(--muted);line-height:1.7;animation:fadeUp .8s .2s ease both}
-.cta-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2.5rem;animation:fadeUp .8s .3s ease both}
-.btn{padding:.85rem 2rem;border-radius:12px;font-weight:600;font-size:.95rem;cursor:pointer;border:none;transition:all .25s}
-.btn-primary{background:linear-gradient(135deg,#00d4ff,#7c3aed);color:#fff}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,212,255,.3)}
-.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
-.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.hero{min-height:100svh;display:flex;align-items:center;padding:80px var(--pad) 60px;background:linear-gradient(150deg,#c8e1ff 0%,#daeeff 30%,#edf6ff 60%,#f5f9ff 80%,var(--bg) 100%);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(rgba(0,113,227,.04) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,rgba(0,113,227,.04) 1px,transparent 1px) 0 0/48px 48px;pointer-events:none}
+.hero-inner{max-width:780px;position:relative;z-index:1}
+.tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--fm);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);background:rgba(0,113,227,.1);padding:6px 18px;border-radius:100px;margin-bottom:32px}
+h1{font-size:clamp(40px,6vw,80px);font-weight:900;line-height:1.04;letter-spacing:-.04em;margin-bottom:24px}
+.gr{background:linear-gradient(90deg,#0071e3,#00b4d8,#2997ff,#5ac8fa);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:sh 4s linear infinite}@keyframes sh{to{background-position:200% center}}
+.hero p{font-size:clamp(17px,2vw,22px);color:var(--mid);line-height:1.65;max-width:640px;margin-bottom:40px}
+.hero-acts{display:flex;gap:14px;flex-wrap:wrap}
 /* STATS */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin:4rem 2rem}
-.stat{background:var(--surface);padding:2rem;text-align:center}
-.stat-num{font-size:2.5rem;font-weight:900;font-family:'JetBrains Mono',monospace;background:linear-gradient(135deg,#00d4ff,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.stat-label{font-size:.8rem;color:var(--muted);margin-top:.25rem;text-transform:uppercase;letter-spacing:.08em}
+.stats{background:var(--dark);padding:60px var(--pad);display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px}
+.stat-wrap{background:#111;padding:40px 32px;text-align:center}
+.sn{font-family:var(--fm);font-size:3rem;font-weight:900;background:linear-gradient(135deg,#5ac8fa,#2997ff,#0071e3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.sl{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#666;margin-top:8px}
 /* SECTION */
-section{max-width:1100px;margin:0 auto;padding:5rem 2rem}
-.section-tag{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:.15em;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
-.section-tag::before{content:'//'}
-h2{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;letter-spacing:-.02em;margin-bottom:.75rem}
-.section-desc{color:var(--muted);font-size:1.05rem;line-height:1.7;max-width:600px;margin-bottom:3rem}
+.s{max-width:1160px;margin:0 auto;padding:100px var(--pad)}
+.eyebrow{font-family:var(--fm);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:16px}
+h2{font-size:clamp(32px,4vw,56px);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:16px}
+.desc{font-size:18px;color:var(--mid);line-height:1.7;max-width:580px;margin-bottom:56px}
 /* LAYERS */
-.layers{display:flex;flex-direction:column;gap:1px}
-.layer{display:flex;align-items:center;gap:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;transition:all .25s;cursor:default;position:relative;overflow:hidden}
-.layer:hover{border-color:var(--accent);transform:translateX(6px)}
-.layer::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
-.layer.intent::before{background:var(--accent)}
-.layer.pattern::before{background:var(--accent2)}
-.layer.exec::before{background:var(--accent3)}
-.layer.safety::before{background:var(--red)}
-.layer.audit::before{background:var(--yellow)}
-.layer-icon{font-size:1.5rem;width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.layer.intent .layer-icon{background:rgba(0,212,255,.1)}
-.layer.pattern .layer-icon{background:rgba(124,58,237,.1)}
-.layer.exec .layer-icon{background:rgba(16,185,129,.1)}
-.layer.safety .layer-icon{background:rgba(239,68,68,.1)}
-.layer.audit .layer-icon{background:rgba(245,158,11,.1)}
-.layer-title{font-weight:700;font-size:1rem;margin-bottom:.25rem}
-.layer-desc{font-size:.875rem;color:var(--muted);line-height:1.5}
-.layer-tag{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:.25rem .75rem;border-radius:100px;flex-shrink:0}
-.layer.intent .layer-tag{background:rgba(0,212,255,.1);color:var(--accent)}
-.layer.pattern .layer-tag{background:rgba(124,58,237,.1);color:#a78bfa}
-.layer.exec .layer-tag{background:rgba(16,185,129,.1);color:var(--accent3)}
-.layer.safety .layer-tag{background:rgba(239,68,68,.1);color:var(--red)}
-.layer.audit .layer-tag{background:rgba(245,158,11,.1);color:var(--yellow)}
-/* HALT TABLE */
-.halt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
-.halt-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:all .25s}
-.halt-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
-.halt-ns{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.2rem .6rem;border-radius:6px;display:inline-block;margin-bottom:.75rem}
-.ns-intent{background:rgba(0,212,255,.15);color:#00d4ff}
-.ns-safety{background:rgba(239,68,68,.15);color:#f87171}
-.ns-system{background:rgba(245,158,11,.15);color:#fbbf24}
-.ns-pattern{background:rgba(124,58,237,.15);color:#a78bfa}
-.ns-execution{background:rgba(16,185,129,.15);color:#34d399}
-.halt-code{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--text);font-weight:500;line-height:1.8}
+.layers{display:flex;flex-direction:column;gap:2px}
+.layer{display:flex;align-items:center;gap:20px;background:var(--white);border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:24px 28px;transition:all .25s;position:relative;overflow:hidden}
+.layer::after{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px;background:var(--c,var(--blue))}
+.layer:hover{border-color:rgba(0,113,227,.3);box-shadow:0 8px 32px rgba(0,113,227,.08);transform:translateX(4px)}
+.lico{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:1.4rem;flex-shrink:0;background:rgba(0,113,227,.08)}
+.lt{font-size:17px;font-weight:700;margin-bottom:4px}
+.ld{font-size:14px;color:var(--mid);line-height:1.55;flex:1}
+.ltag{margin-left:auto;font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:100px;background:rgba(0,113,227,.1);color:var(--blue);flex-shrink:0}
+/* HALT */
+.halt-bg{background:var(--bg);padding:80px var(--pad)}
+.halt-inner{max-width:1160px;margin:0 auto}
+.halt-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:48px}
+.hc{background:var(--white);border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:24px;transition:all .25s}
+.hc:hover{box-shadow:0 12px 40px rgba(0,0,0,.08);transform:translateY(-4px)}
+.hns{font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:14px}
+.ns-i{background:rgba(0,113,227,.12);color:#0071e3}.ns-s{background:rgba(239,68,68,.12);color:#dc2626}.ns-sys{background:rgba(245,158,11,.12);color:#d97706}.ns-p{background:rgba(124,58,237,.12);color:#7c3aed}.ns-e{background:rgba(16,185,129,.12);color:#059669}
+.hcode{font-family:var(--fm);font-size:13px;line-height:1.9;color:var(--dark);font-weight:500}
 /* TIMELINE */
-.timeline{position:relative;padding-left:2rem}
-.timeline::before{content:'';position:absolute;left:.5rem;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--accent),var(--accent2),var(--accent3))}
-.tl-item{position:relative;margin-bottom:2.5rem}
-.tl-dot{position:absolute;left:-1.625rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--accent);background:var(--bg);top:.25rem}
-.tl-ver{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--accent);font-weight:700;margin-bottom:.25rem}
-.tl-title{font-weight:700;font-size:1.05rem;margin-bottom:.5rem}
-.tl-desc{font-size:.875rem;color:var(--muted);line-height:1.6}
-/* CODE BLOCK */
-.code-block{background:#0d1117;border:1px solid var(--border);border-radius:12px;padding:1.5rem;font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:1.8;overflow-x:auto;position:relative}
-.code-block::before{content:'YAML';position:absolute;top:.75rem;right:1rem;font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
-.k{color:#7c3aed}.v{color:#10b981}.c{color:#4b5563;font-style:italic}.s{color:#f59e0b}
+.tl{position:relative;padding-left:32px;max-width:720px}
+.tl::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--blue),#2997ff,#00b4d8,#5ac8fa)}
+.tli{position:relative;margin-bottom:44px}
+.tli::before{content:'';position:absolute;left:-26px;width:14px;height:14px;border-radius:50%;border:2px solid var(--blue);background:var(--white);top:4px}
+.tv{font-family:var(--fm);font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px}
+.tt{font-size:18px;font-weight:700;margin-bottom:6px}
+.td{font-size:14px;color:var(--mid);line-height:1.6}
+/* CODE */
+.cb{background:#1d1d1f;border-radius:16px;padding:32px;font-family:var(--fm);font-size:13px;line-height:2;overflow-x:auto;position:relative}
+.cb::before{content:'YAML';position:absolute;top:14px;right:20px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#666}
+.ck{color:#5ac8fa}.cv{color:#34c759}.cc{color:#666;font-style:italic}.cs{color:#ffd60a}
 /* VERDICT */
-.verdict-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
-.verdict-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem}
-.verdict-label{font-size:.8rem;color:var(--muted);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em}
-.verdict-status{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:.5rem}
-.dot-green{width:8px;height:8px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;flex-shrink:0}
-.dot-yellow{width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0}
+.vg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.vc{background:var(--white);border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:24px}
+.vl{font-size:12px;color:var(--mid);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.vs{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.dg{width:8px;height:8px;border-radius:50%;background:#34c759;box-shadow:0 0 8px rgba(52,199,89,.6);flex-shrink:0}
+.dy{width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0}
+/* QUOTE */
+.quote-box{background:linear-gradient(135deg,rgba(0,113,227,.06),rgba(0,180,216,.06));border:1px solid rgba(0,113,227,.15);border-radius:20px;padding:36px 40px;margin-top:40px}
 /* FOOTER */
-footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
-.footer-ver{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--muted)}
-.footer-title{font-size:1.25rem;font-weight:700;margin-bottom:.5rem}
+footer{background:var(--dark);color:#fff;padding:60px var(--pad);text-align:center}
+.ft{font-size:24px;font-weight:800;margin-bottom:8px}
+.fm{font-family:var(--fm);font-size:12px;color:#555;letter-spacing:.06em}
+@keyframes fade-up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.fade-up{opacity:0;animation:fade-up .7s var(--delay,.1s) cubic-bezier(.16,1,.3,1) forwards}
 </style></head><body>
-<div class="noise"></div>
-<div class="grid-bg"></div>
-
-<!-- HERO -->
-<div class="hero">
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="badge">PRODUCTION STABLE · V4.4.2 · DEFINITION HARDENED</div>
-  <h1>Antigravity<br><span>Brain OS</span></h1>
-  <p class="sub">Không phải AI Agent nữa. Đây là <strong>Execution Safety Kernel</strong> — hệ điều hành cấp công nghiệp kiểm soát từng byte thay đổi trong môi trường DOM rủi ro cao.</p>
-  <div class="cta-row">
-    <button class="btn btn-primary">Xem Kiến Trúc</button>
-    <button class="btn btn-outline">global_agent_rules.yaml</button>
-  </div>
-</div>
-
-<!-- STATS -->
-<div class="stats">
-  <div class="stat"><div class="stat-num">5</div><div class="stat-label">HALT Namespaces</div></div>
-  <div class="stat"><div class="stat-num">9</div><div class="stat-label">HALT States</div></div>
-  <div class="stat"><div class="stat-num">4</div><div class="stat-label">Memory Tiers</div></div>
-  <div class="stat"><div class="stat-num">0</div><div class="stat-label">Technical Debt</div></div>
-  <div class="stat"><div class="stat-num">4.5</div><div class="stat-label">Autonomy Level</div></div>
-</div>
-
-<!-- ARCHITECTURE -->
-<section>
-  <div class="section-tag">Architecture</div>
-  <h2>5 Lớp Phòng Thủ Chồng Nhau</h2>
-  <p class="section-desc">Mỗi lệnh từ người dùng phải vượt qua 5 tầng kiểm tra độc lập trước khi được phép chạm vào DOM. Không có đường tắt.</p>
-  <div class="layers">
-    <div class="layer intent">
-      <div class="layer-icon">🔥</div>
-      <div><div class="layer-title">Intent Firewall</div><div class="layer-desc">Lọc lệnh mơ hồ ngay cửa vào. Chặn các pattern nguy hiểm như "optimize", "clean", "guess". Gợi ý lệnh chuẩn thay vì từ chối suông.</div></div>
-      <span class="layer-tag">SYSCALL FILTER</span>
-    </div>
-    <div class="layer pattern">
-      <div class="layer-icon">🧠</div>
-      <div><div class="layer-title">Pattern Immunity Engine</div><div class="layer-desc">Context Hash 5 chiều (URL + Selector + Parent + Siblings + Intent). Phân biệt SUSPECT (1-2/5 thay đổi) và LEAK (3+/5 thay đổi). Chống ảo giác "copy giải pháp cũ sang ngữ cảnh mới".</div></div>
-      <span class="layer-tag">ANTI-HALLUCINATION</span>
-    </div>
-    <div class="layer exec">
-      <div class="layer-icon">⚡</div>
-      <div><div class="layer-title">Two-Phase Commit</div><div class="layer-desc">Phase 1: Lập kế hoạch — không chạm DOM. Phase 2: Thực thi 1 lần duy nhất + Verify ngay lập tức. Narrowing Stage tối đa 2 cấp cha. Execution Reentry: strictly forbidden.</div></div>
-      <span class="layer-tag">TRANSACTION MODEL</span>
-    </div>
-    <div class="layer safety">
-      <div class="layer-icon">🛡️</div>
-      <div><div class="layer-title">Atomic Rollback + Post-Validation</div><div class="layer-desc">Nếu Verification thất bại, khôi phục tức thì. Sau Rollback bắt buộc chạy lại 3 guard để xác nhận DOM sạch. Immutability Decay: mỗi lỗi trừ 2 điểm uy tín, không reset.</div></div>
-      <span class="layer-tag">KERNEL PANIC SAFE</span>
-    </div>
-    <div class="layer audit">
-      <div class="layer-icon">📋</div>
-      <div><div class="layer-title">Forensic Audit Trail</div><div class="layer-desc">Mỗi tác vụ ghi lại: dom_hash_before/after, node count delta, DTV snapshot, halt_namespace. Tối đa 5 snapshots, mỗi snapshot &lt;1KB. Đủ để debug mọi sự cố mà không cần hỏi lại Agent.</div></div>
-      <span class="layer-tag">SYSTEM LOGS</span>
-    </div>
-  </div>
-</section>
-
-<!-- HALT SYSTEM -->
-<section style="background:linear-gradient(135deg,rgba(124,58,237,.05),rgba(0,212,255,.05));border-radius:24px;margin:0 2rem">
-  <div class="section-tag">Safety System</div>
-  <h2>HALT Namespace Taxonomy</h2>
-  <p class="section-desc">9 trạng thái dừng khẩn cấp được phân loại thành 5 nhóm xác định. Không có trạng thái mơ hồ. Không có đường thoát ngoài lệnh RESET_SAFE của con người.</p>
-  <div class="halt-grid">
-    <div class="halt-card"><span class="halt-ns ns-intent">INTENT</span><div class="halt-code">HALT(INTENT_REJECTED)</div></div>
-    <div class="halt-card"><span class="halt-ns ns-safety">SAFETY</span><div class="halt-code">HALT(EMERGENCY_<br>ROLLBACK_FAILED)</div></div>
-    <div class="halt-card"><span class="halt-ns ns-system">SYSTEM</span><div class="halt-code">HALT(AUTONOMY_GATE_FAIL)<br>HALT(PREFLIGHT_FAILED)</div></div>
-    <div class="halt-card"><span class="halt-ns ns-pattern">PATTERN</span><div class="halt-code">HALT(PATTERN_SUSPECT)<br>HALT(PATTERN_LEAK)<br>HALT(PATTERN_BLOCKED)</div></div>
-    <div class="halt-card"><span class="halt-ns ns-execution">EXECUTION</span><div class="halt-code">HALT(VERIFICATION_<br>FAILED)</div></div>
-  </div>
-</section>
-
-<!-- TIMELINE -->
-<section>
-  <div class="section-tag">Evolution</div>
-  <h2>Hành Trình Từ Agent → Kernel</h2>
-  <p class="section-desc">Được kiểm toán bởi nhiều chuyên gia AI Agent qua từng phiên bản, mỗi phát hiện đều được vá ngay trong sprint tiếp theo.</p>
-  <div class="timeline">
-    <div class="tl-item"><div class="tl-dot"></div><div class="tl-ver">V4.3.0</div><div class="tl-title">Mnemosyne-Evolution</div><div class="tl-desc">Đặt nền móng: HALT Protocol, Selector Evidence Boolean, Context Hash, Audit Trail. Chuyển từ "AI đoán mò" sang "Agent cần bằng chứng thép".</div></div>
-    <div class="tl-item"><div class="tl-dot" style="border-color:var(--accent2)"></div><div class="tl-ver">V4.4.0</div><div class="tl-title">Stability Layer</div><div class="tl-desc">Thêm Graceful Degradation (gợi ý lệnh đúng), Narrowing Stage (thu hẹp Selector thay vì từ chối ngay), Post-Rollback Validation, System Drift Monitor 3 cấp.</div></div>
-    <div class="tl-item"><div class="tl-dot" style="border-color:var(--accent3)"></div><div class="tl-ver">V4.4.1</div><div class="tl-title">Technical Debt Cleanup</div><div class="tl-desc">Thanh toán 8 nợ kỹ thuật tích lũy: Khóa Execution Reentry, chuẩn hóa HALT Namespace, Negative Memory Enforcement, dom_hash forensics, Narrowing max_depth=2.</div></div>
-    <div class="tl-item"><div class="tl-dot" style="border-color:var(--yellow)"></div><div class="tl-ver">V4.4.2</div><div class="tl-title">Definition Hardening (Current)</div><div class="tl-desc">Công thức hóa mọi khái niệm còn mơ hồ: Decay = max(0, score-2), SUSPECT = 1-2/5 hash diff, LEAK = 3+/5, Severity Lock Protocol với timeout tự khóa. Zero technical debt.</div></div>
-  </div>
-</section>
-
-<!-- CODE SAMPLE -->
-<section>
-  <div class="section-tag">Under The Hood</div>
-  <h2>Một Đoạn Từ Kernel</h2>
-  <div class="code-block">
-<span class="c"># Pattern Immunity — không còn "minor" mơ hồ</span><br>
-<span class="k">pattern_immunity_engine</span>:<br>
-&nbsp;&nbsp;<span class="k">rule_suspect</span>:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">condition</span>: <span class="s">"fingerprint matches AND 1-2 of 5 hash components differ"</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">action</span>: <span class="s">"HALT(PATTERN_SUSPECT)"</span><br>
-&nbsp;&nbsp;<span class="k">rule_leak</span>:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">condition</span>: <span class="s">"fingerprint matches AND 3+ of 5 hash components differ"</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">action</span>: <span class="s">"HALT(PATTERN_LEAK) — absolute stop"</span><br>
-<br>
-<span class="c"># Immutability — decay thay vì reset</span><br>
-<span class="k">decay_on_rollback</span>:<br>
-&nbsp;&nbsp;<span class="k">formula</span>: <span class="v">consecutive_successes = max(0, score - 2)</span><br>
-&nbsp;&nbsp;<span class="k">rationale</span>: <span class="s">"Partial credit. Prevents over-conservative behavior."</span><br>
-<br>
-<span class="c"># Execution — không có đường nào để thử lại</span><br>
-<span class="k">phase_2_execute</span>:<br>
-&nbsp;&nbsp;<span class="k">rollback_permitted</span>: <span class="v">true</span><br>
-&nbsp;&nbsp;<span class="k">retry_permitted</span>: <span class="v">false</span><br>
-&nbsp;&nbsp;<span class="k">execution_reentry</span>: <span class="s">"strictly forbidden"</span>
-  </div>
-</section>
-
-<!-- VERDICT -->
-<section>
-  <div class="section-tag">Expert Audit Verdict</div>
-  <h2>Đánh Giá Từ Chuyên Gia</h2>
-  <p class="section-desc">Qua 7 vòng kiểm toán độc lập bởi các chuyên gia kiến trúc AI Agent.</p>
-  <div class="verdict-grid">
-    <div class="verdict-card"><div class="verdict-label">Safety</div><div class="verdict-status"><span class="dot-green"></span>Excellent</div></div>
-    <div class="verdict-card"><div class="verdict-label">Determinism</div><div class="verdict-status"><span class="dot-green"></span>Excellent</div></div>
-    <div class="verdict-card"><div class="verdict-label">Debuggability</div><div class="verdict-status"><span class="dot-green"></span>Production-grade</div></div>
-    <div class="verdict-card"><div class="verdict-label">Maintainability</div><div class="verdict-status"><span class="dot-green"></span>Good</div></div>
-    <div class="verdict-card"><div class="verdict-label">Technical Debt</div><div class="verdict-status"><span class="dot-green"></span>Zero (V4.4.2)</div></div>
-    <div class="verdict-card"><div class="verdict-label">Over-constraining</div><div class="verdict-status"><span class="dot-yellow"></span>Monitor</div></div>
-  </div>
-  <div style="margin-top:2rem;padding:1.5rem;background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:12px">
-    <p style="font-style:italic;color:var(--muted);line-height:1.8">"V4.4.2 không còn là AI agent ruleset. Nó là <strong style="color:var(--text)">Deterministic Execution Kernel for DOM Mutation Safety</strong>. Có thể coi là baseline production v1 của hệ DOM-safe agent."</p>
-    <p style="margin-top:.75rem;font-size:.8rem;color:var(--muted)">— Expert Audit · Antigravity Brain OS V4.4.2</p>
-  </div>
-</section>
-
-<footer>
-  <div class="footer-title">Antigravity Brain OS</div>
-  <div class="footer-ver">VERSION 4.4.2 · DEFINITION HARDENED · github.com/tanphan1105/antigravity-brain-os</div>
-  <p style="margin-top:.75rem;font-size:.8rem;color:var(--muted)">Built with Toyota Jidoka · Karpathy Discipline · Sun Tzu Strategy</p>
-</footer>
+<nav><div class="logo"><span class="dot"></span>ANTIGRAVITY · BRAIN OS</div><a class="nav-link" href="#arch">Architecture</a><a class="nav-link" href="#halt">HALT System</a><a class="nav-link" href="#history">History</a><a class="pill" href="https://github.com/tanphan1105/antigravity-brain-os" target="_blank">GitHub →</a></nav>
+<div class="hero"><div class="hero-inner"><div class="tag">V4.4.2 · Production Stable · Zero Technical Debt</div><h1>The AI Agent<br>That <span class="gr">Knows When To Stop</span></h1><p>Not a chatbot. Not a prompt. A deterministic <strong>Execution Safety Kernel</strong> — an industrial-grade OS that controls every DOM byte change with transaction-level precision.</p><div class="hero-acts"><a class="pill" href="#arch">Explore Architecture</a><a class="pill pill-ghost" href="https://github.com/tanphan1105/antigravity-brain-os" target="_blank">View on GitHub</a></div></div></div>
+<div class="stats"><div class="stat-wrap"><div class="sn">5</div><div class="sl">HALT Namespaces</div></div><div class="stat-wrap"><div class="sn">9</div><div class="sl">HALT States</div></div><div class="stat-wrap"><div class="sn">4.5</div><div class="sl">Autonomy Level</div></div><div class="stat-wrap"><div class="sn">0</div><div class="sl">Technical Debt</div></div><div class="stat-wrap"><div class="sn">7+</div><div class="sl">Expert Audits</div></div></div>
+<section class="s" id="arch"><div class="eyebrow">// Architecture</div><h2>5 Defense Layers.<br>Zero Guessing.</h2><p class="desc">Every command must pass 5 independent checkpoints before touching the DOM. No shortcuts. No AI inference without hard evidence.</p><div class="layers"><div class="layer" style="--c:#0071e3"><div class="lico">🔥</div><div><div class="lt">Intent Firewall</div><div class="ld">Blocks vague commands ("optimize", "clean", "guess") at the door. Outputs structured intent templates instead of silent rejection.</div></div><span class="ltag">Syscall Filter</span></div><div class="layer" style="--c:#7c3aed"><div class="lico">🧠</div><div><div class="lt">Pattern Immunity Engine</div><div class="ld">5-component Context Hash (URL + Selector + Parent + Siblings + Intent). Diff 1-2/5 = SUSPECT. Diff 3+/5 = LEAK. Prevents cross-context hallucination.</div></div><span class="ltag">Anti-Hallucination</span></div><div class="layer" style="--c:#34c759"><div class="lico">⚡</div><div><div class="lt">Two-Phase Commit</div><div class="ld">Phase 1: Plan only — zero DOM touch. Phase 2: Execute once, verify immediately. Execution reentry: strictly forbidden. Narrowing max 2 parent levels.</div></div><span class="ltag">Transaction Model</span></div><div class="layer" style="--c:#ef4444"><div class="lico">🛡️</div><div><div class="lt">Atomic Rollback + Post-Validation</div><div class="ld">On verification failure: instant restore from snapshot. Post-rollback runs all 3 static guards to confirm clean DOM. Decay formula: score = max(0, score − 2).</div></div><span class="ltag">Kernel Panic Safe</span></div><div class="layer" style="--c:#f59e0b"><div class="lico">📋</div><div><div class="lt">Forensic Audit Trail</div><div class="ld">Every task logs: dom_hash_before/after, node count delta, halt_namespace, full DTV snapshot. Max 5 snapshots · &lt;1KB each. Debug any failure without asking the agent.</div></div><span class="ltag">System Logs</span></div></div></section>
+<div class="halt-bg" id="halt"><div class="halt-inner"><div class="eyebrow">// Safety System</div><h2>HALT Namespace Taxonomy</h2><p class="desc">9 emergency stop states organized into 5 deterministic namespaces. No ambiguity. No self-resume. Every HALT waits for a human RESET_SAFE signal.</p><div class="halt-cards"><div class="hc"><span class="hns ns-i">INTENT</span><div class="hcode">HALT(INTENT_<br>REJECTED)</div></div><div class="hc"><span class="hns ns-s">SAFETY</span><div class="hcode">HALT(EMERGENCY_<br>ROLLBACK_FAILED)</div></div><div class="hc"><span class="hns ns-sys">SYSTEM</span><div class="hcode">HALT(AUTONOMY_<br>GATE_FAIL)<br>HALT(PREFLIGHT_<br>FAILED)</div></div><div class="hc"><span class="hns ns-p">PATTERN</span><div class="hcode">HALT(PATTERN_<br>SUSPECT)<br>HALT(PATTERN_LEAK)<br>HALT(PATTERN_<br>BLOCKED)</div></div><div class="hc"><span class="hns ns-e">EXECUTION</span><div class="hcode">HALT(VERIFICATION_<br>FAILED)</div></div></div></div></div>
+<section class="s" id="history"><div class="eyebrow">// Evolution</div><h2>From Agent to Kernel</h2><p class="desc">Audited by multiple AI architecture experts across every release. Every finding patched in the next sprint.</p><div class="tl"><div class="tli"><div class="tv">V4.3.0</div><div class="tt">Mnemosyne-Evolution</div><div class="td">Foundation: HALT Protocol, Boolean Selector Evidence, Context Hash 5-component, Audit Trail. Moved from "AI guessing" to "Agent requires steel evidence".</div></div><div class="tli"><div class="tv">V4.4.0</div><div class="tt">Stability Layer</div><div class="td">Added Graceful Degradation (suggest correct commands), Narrowing Stage, Post-Rollback Validation, and 3-tier System Drift Monitor.</div></div><div class="tli"><div class="tv">V4.4.1</div><div class="tt">Technical Debt Cleanup</div><div class="td">Cleared 8 accumulated debts: Execution Reentry ban, HALT Namespace standardization, Negative Memory Enforcement, dom_hash forensics, Narrowing max_depth=2.</div></div><div class="tli"><div class="tv">V4.4.2 — Current</div><div class="tt">Definition Hardening</div><div class="td">Formalized every ambiguous concept: Decay = max(0, score−2), SUSPECT = 1-2/5 hash diff, LEAK = 3+/5, Severity Lock Protocol with session timeout. Zero technical debt.</div></div></div></section>
+<section class="s" style="background:var(--bg);padding:80px var(--pad);max-width:100%"><div style="max-width:1160px;margin:0 auto"><div class="eyebrow">// Under The Hood</div><h2>From The Kernel</h2><div class="cb"><span class="cc"># Pattern Immunity — no more vague "minor"</span><br><span class="ck">rule_suspect</span>:<br>&nbsp;&nbsp;<span class="ck">condition</span>: <span class="cs">"fingerprint matches AND 1-2 of 5 hash components differ"</span><br>&nbsp;&nbsp;<span class="ck">action</span>: <span class="cs">"HALT(PATTERN_SUSPECT)"</span><br><span class="ck">rule_leak</span>:<br>&nbsp;&nbsp;<span class="ck">condition</span>: <span class="cs">"fingerprint matches AND 3+ of 5 hash components differ"</span><br>&nbsp;&nbsp;<span class="ck">action</span>: <span class="cs">"HALT(PATTERN_LEAK) — absolute stop"</span><br><br><span class="cc"># Immutability — decay instead of hard reset</span><br><span class="ck">decay_on_rollback</span>:<br>&nbsp;&nbsp;<span class="ck">formula</span>: <span class="cv">consecutive_successes = max(0, score - 2)</span><br>&nbsp;&nbsp;<span class="ck">rationale</span>: <span class="cs">"Partial credit. Prevents over-conservative behavior."</span><br><br><span class="cc"># Execution — no second chances</span><br><span class="ck">phase_2_execute</span>:<br>&nbsp;&nbsp;<span class="ck">rollback_permitted</span>: <span class="cv">true</span><br>&nbsp;&nbsp;<span class="ck">retry_permitted</span>: <span class="cv">false</span><br>&nbsp;&nbsp;<span class="ck">execution_reentry</span>: <span class="cs">"strictly forbidden"</span></div></div></section>
+<section class="s"><div class="eyebrow">// Expert Verdict</div><h2>What The Auditors Said</h2><p class="desc">After 7+ independent expert audits spanning V4.3 through V4.4.2.</p><div class="vg"><div class="vc"><div class="vl">Safety</div><div class="vs"><span class="dg"></span>Excellent</div></div><div class="vc"><div class="vl">Determinism</div><div class="vs"><span class="dg"></span>Excellent</div></div><div class="vc"><div class="vl">Debuggability</div><div class="vs"><span class="dg"></span>Production-Grade</div></div><div class="vc"><div class="vl">Maintainability</div><div class="vs"><span class="dg"></span>Good</div></div><div class="vc"><div class="vl">Technical Debt</div><div class="vs"><span class="dg"></span>Zero (V4.4.2)</div></div><div class="vc"><div class="vl">Over-constraining</div><div class="vs"><span class="dy"></span>Monitor</div></div></div><div class="quote-box"><p style="font-size:18px;line-height:1.75;color:var(--dark);font-style:italic">"V4.4.2 is no longer an AI agent ruleset. It is a <strong>Deterministic Execution Kernel for DOM Mutation Safety</strong> — a genuine control-plane architecture comparable to distributed systems design."</p><p style="margin-top:16px;font-size:13px;color:var(--mid);font-family:'JetBrains Mono',monospace">— Expert Audit · Antigravity Brain OS V4.4.2</p></div></section>
+<footer><div class="ft">Antigravity Brain OS</div><p style="color:#888;margin:8px 0 16px;font-size:15px">Built with Toyota Jidoka · Karpathy Discipline · Sun Tzu Strategy</p><div class="fm">V4.4.2 · DEFINITION HARDENED · github.com/tanphan1105/antigravity-brain-os</div></footer>
 </body></html>
