@@ -1,5 +1,16 @@
 # Changelog - Antigravity Brain OS
 
+## [4.4.2] Definition Hardening - 2026-04-26
+
+### 🔩 Siết Chặt Định Nghĩa (No New Features — Definition-Only Patch)
+- **Decay Formula Rõ Ràng:** `immutability_decay_factor` giờ có công thức cứng: `consecutive_successes = max(0, consecutive_successes - 2)`. Sau rollback, Agent không bị xóa sạch bộ nhớ mà chỉ bị trừ 2 điểm uy tín, tránh hiện tượng "sợ thử nghiệm".
+- **Severity Lock Protocol:** `severity_lock_requires_confirmation` được định nghĩa đầy đủ: áp dụng cho severity 3-4, dùng lệnh `CONFIRM_BLOCK`, nếu hết session mà không có xác nhận → tự khóa như biện pháp phòng thủ.
+- **Ngưỡng SUSPECT vs LEAK:** Không còn "mơ hồ". Khác 1-2/5 thành phần Hash → `PATTERN_SUSPECT`. Khác 3+/5 → `PATTERN_LEAK`. Agent không thể tự diễn giải.
+- **HALT Routing Rule:** Bổ sung `halt_classification_must_be_deterministic: true`. Agent bắt buộc phải phân loại đúng Namespace trước khi phát lệnh HALT. Nếu mơ hồ → mặc định `SYSTEM` và log để người xét.
+- **Rollback Trigger Rõ Ràng:** Ghi rõ Rollback chỉ được kích hoạt bởi `static_verification_engine`, không phải Agent tự quyết định.
+- **Drift Level 3-Tier:** Hệ thống giám sát độ lệch giờ có 3 cấp phản ứng tự động: Log → Alert → SAFE_MODE (chỉ đọc, không thực thi).
+- **Noise Margin là Hằng Số Cố Định:** Ghi rõ `noise_margin` là environment-calibrated constant, Agent không được phép tự thay đổi lúc runtime.
+
 ## [4.4.1] Technical Debt Cleanup - 2026-04-26
 
 ### 🧹 Dọn Dẹp Nợ Kỹ Thuật (Technical Debt Cleanup)
