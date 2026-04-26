@@ -1,5 +1,17 @@
 # Changelog - Antigravity Brain OS
 
+## [4.4.1] Technical Debt Cleanup - 2026-04-26
+
+### 🧹 Dọn Dẹp Nợ Kỹ Thuật (Technical Debt Cleanup)
+- **Cấm Reentry & Loại bỏ Max Retry:** Xóa bỏ hoàn toàn cài đặt `max_retry_limit: 1`. Chuyển sang cờ xác định cực chuẩn: `rollback_permitted: true`, `retry_permitted: false`. Bổ sung cấm tuyệt đối `execution_reentry: strictly forbidden` để tránh Agent cố gắng chạy lại vòng lặp mạo danh Rollback.
+- **Negative Memory Enforcement:** Kích hoạt chức năng Khóa tự động đối với các thẻ bị phạt (Severity >= 3). Khi đạt ngưỡng, hệ thống sẽ chặn đứng ngay tại Intent Firewall (`HALT(PATTERN_BLOCKED)`), tiết kiệm Token và ngăn chặn tận gốc rủi ro.
+- **Nâng Cấp Immutable Memory:** Siết chặt điều kiện để ghi nhớ vĩnh viễn: Phải thành công 3 lần liên tiếp, không phát sinh lỗi trong 24h. Thay vì xóa sạch dữ liệu nếu Rollback, V4.4.1 áp dụng `immutability_decay_factor` để hạ điểm uy tín thay vì reset trắng, giúp Agent không bị "sợ hãi thử nghiệm".
+- **Ghi Log Nâng Cao (Audit Trail):** Thêm `dom_hash_before`, `dom_hash_after` (thuật toán MD5/SHA-256) và đo kích thước DOM (`dom_size`) vào Audit Trail để con người dễ dàng đối chiếu mã nguồn khi hệ thống xảy ra lỗi.
+- **Tiêu Chuẩn Hóa HALT Namespace:** Không còn để danh sách `HALT` nằm rải rác. Hệ thống giờ gom tất cả 9 lỗi thành 5 nhóm Namespace chuẩn hóa: `INTENT`, `SAFETY`, `SYSTEM`, `PATTERN`, `EXECUTION`. Các mã thiếu sót như `AUTONOMY_GATE_FAIL` và `PREFLIGHT_FAILED` đã được đăng ký đầy đủ.
+- **Chuẩn Hóa Sibling Checksum:** Xác định rõ thuật toán băm Sibling (Anh em của thẻ HTML): `trim whitespace + tag_name only, max 5 siblings joined by |`. Tránh tình trạng khoảng trắng dư thừa gây kích hoạt giả.
+- **Khóa Chặn Lặp Vô Tận (Narrowing Stage):** Đặt giới hạn `max_depth: 2` cho vòng lặp cứu hộ Selector. Tách bạch rõ hành vi: "Chỉ được phép tìm kiếm cấu trúc cha/anh em (Structural Navigation), cấm tuyệt đối tự suy diễn ngữ nghĩa (Semantic Inference)".
+
+
 ## [4.4.0] Stability-Layer - 2026-04-26
 
 ### 🛡️ Nâng Cấp Lớp Ổn Định (Stability Layer Upgrades)
