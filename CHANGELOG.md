@@ -1,5 +1,14 @@
 # Changelog - Antigravity Brain OS
 
+## [4.4.0] Stability-Layer - 2026-04-26
+
+### 🛡️ Nâng Cấp Lớp Ổn Định (Stability Layer Upgrades)
+- **Graceful Degradation (Tường lửa Ý định):** Agent không còn "sập cứng" khi người dùng nhập sai lệnh. Giờ đây, nếu lệnh bị từ chối, Agent sẽ xuất `suggested_intent_templates` để hướng dẫn người dùng nhập đúng cú pháp.
+- **Narrowing Stage (Cứu Hộ Selector):** Thêm một vòng lặp thu hẹp phạm vi. Nếu tìm thấy nhiều selector trùng nhau, Agent sẽ tự động dùng `parent_tag` hoặc `sibling_context` để cố gắng lọc ra thẻ độc nhất, thay vì bỏ cuộc ngay lập tức.
+- **Post-Rollback Validation Loop:** Sau khi xảy ra sự cố và tiến hành Rollback, Agent bắt buộc phải chạy 1 vòng lặp kiểm tra để xác nhận DOM thực sự nguyên vẹn và không bị nhiễm mã rác `wpautop` do side-effects.
+- **Phân Cấp Miễn Dịch (Suspect vs Leak):** Hệ thống miễn dịch giờ chia làm 2 cấp: `PATTERN_SUSPECT` (khả nghi, yêu cầu người duyệt lại) và `PATTERN_LEAK` (lặp lại mù quáng, khóa cứng hệ thống).
+- **System Drift Monitor:** Bổ sung theo dõi độ lệch hệ thống. Nếu Agent liên tục sập vì sai số lượng Node (do các plugin tự động sinh ra), hệ thống sẽ báo động để con người điều chỉnh `noise_margin`.
+
 ## [4.3.0] Mnemosyne-Evolution - 2026-04-26
 
 ### 🚀 Nâng Cấp Kiến Trúc (Architecture Upgrades)
